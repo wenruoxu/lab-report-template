@@ -1,0 +1,13 @@
+% - This file defined the format of question blocks.
+
+% 加载 tcolorbox 和 xcolor 包
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+
+% 定义一个定制的 tcolorbox 环境
+\newtcolorbox[auto counter]{questionbox}[1][]{%
+    colback=red!10!white,
+    colframe=red!55!black,
+    title=Question \thetcbcounter,
+    #1
+}

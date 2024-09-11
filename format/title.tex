@@ -1,0 +1,34 @@
+
+
+\usepackage{titlesec} % For section title customization
+
+% Optional: Customize the font
+% \usepackage[T1]{fontenc}
+% \usepackage{lmodern} % Using a slightly nicer font
+
+% Enhance title format
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\section}[block]{\large\bfseries\filcenter}{}{1em}{}
+
+
+
+% Custom title layout
+\title{
+    \vspace{-2.5cm} % Reduce the vertical space above the title
+    \textbf{\Large \coursename} \\[5pt] % Reduce space before the rule
+    \textbf{\Large \labname} \\[-10pt] % Reduced vertical spacing
+    \rule{\textwidth}{1pt} \\[-10pt] % Horizontal rule with negative space to pull text up
+    \begin{tabular}{@{}p{\textwidth}@{}} % Full width tabular
+        \small \textbf{Chen Wu} \hfill  \small \textbf{\today}
+    \end{tabular}
+}
+\date{} % Remove the default date display
+\author{} % Clear the author to manage it manually in the title
+
+% Enhance title format with numbering
+\titleformat{\section}
+  {\large\bfseries\filcenter}  % format
+  {\thesection.}               % label (section number)
+  {1em}                        % sep (space between number and title text)
+  {}                           % before-code
+  
