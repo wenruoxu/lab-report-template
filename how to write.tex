@@ -1,0 +1,160 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr} % for custom headers and footers
+\usepackage[utf8]{inputenc} % support for UTF-8 encoding
+\usepackage{geometry} % for page layout
+\geometry{a4paper, margin=1in} % set A4 paper and margin
+\usepackage{lipsum}  % For generating dummy text
+\usepackage[T1]{fontenc}
+\usepackage{newpxtext,newpxmath}  % Using Palatino font
+\usepackage{hyperref}
+\usepackage{pdfpages}
+% \usepackage{lmodern}
+% \usepackage{helvet}
+
+\setcounter{secnumdepth}{2}
+% 设置文献样式为 IEEE
+\usepackage[style=ieee]{biblatex}
+
+
+\setlength{\headheight}{15pt}
+
+\addbibresource{references/reference.bib}  % 指定文献数据库
+
+
+% 定义课程名称宏
+\newcommand{\coursename}{DAT094}
+\newcommand{\labname}{What constitutes a good lab report?}
+
+\input{format/insert_img}
+
+\input{format/code_block}
+\input{format/question_box}
+\input{format/title}
+
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+\fancyfoot[C]{\thepage} % center page number in the footer
+\fancyhead[L]{\labname} % "Experiment Report" on the left header
+\fancyhead[R]{\coursename} % course name on the right header
+
+% ---Abstract---
+\section*{Abstract}
+
+Over the past few years, I have completed numerous experiment reports for various courses. 
+As time has progressed, a relatively clear understanding of what constitutes an effective laboratory report has developed in my mind.
+At the same time, with the help of writing guide from Chalmers\cite{ChalmersGuide}, deeper cognition on it generated in my mind.
+Next, I will discuss this topic from three aspects: pre-writing consideration, structure and format, and specific implementation. 
+In the first aspect, having a concept of writing purposes and audience is the most important. 
+Secondly, from a formal perspective, a relatively fixed structure and format have more advantages. 
+Besides, we finally discuss how to \("\)implement\("\) a report writing, including several methods to make a report more formal, aesthetic, and effective.
+
+% ---Pre-writing---
+\section{Pre-writing Consideration}
+
+What constitutes a wonderful report?
+Is that can only talk about the specific content in the report itself?
+Actually, author's prior thinking is also an important part because it will instruct their subsequent writing.
+From the website of Chalmers writing guide, several crucial questions which author should pay attention to have been mentioned, of which the most important two are purpose and audiences.
+
+With the guide from the school's official website\cite{ChalmersGuide_pre-writing}, in pre-writing phase, determining who are audience is the first and foremost question.
+Thus, before we're talking about the specific structure and content in a report article, the first task is to ascertain audience.
+Then, we can infer their potential purposes so that what should author mention and which part of our article should be emphasised will be confirmed.
+
+Without any doubt, the task publishers and reviewers, our professor and teacher assistants are guaranteed ones.
+For them, generally have three points to focus: whether students have done their mandatory tasks, checking the answers given by students to the question mentioned in task sheets, evaluating their understanding level. 
+In the following, I will discuss how to perform better in a report for each point.
+
+For the first one, students should follow the guide of task book carefully, and give powerful evidence to demonstrate you accomplished all steps and design, ranging from screenshots to well-designed code snippets.
+Secondly, there are questions related to key concepts you should know in a lab manual generally, and are delving into it when you're completing is the best method.
+Simultaneously, we also need to develop an in-depth understanding before we're writing the answers and reflect on it.
+Besides, from the perspective of professor, show your accomplishment and answers more noticeable by utilizing several measures are preferred because such a strategy will make their work more effective.
+We will give some specific method to realize it in the following sections, however, is the professor the only reader?
+
+Lab reports are also meaningful for the students.
+First and foremost, a report can serve as part of students' note system, the so-called second brain, which can always help remind you of important things.
+Generally, a good report records what I did and what happened when you try to complete your lab task, and, obviously, with the appropriate coursework design, such recording will likely can as a reference when a student starts a new project or faces some similar challenges you had met in your future career.
+So, when writing a report, especially a good and meaningful one, thinking about how it will contribute to you in the future is significant in pre-planning.
+
+Secondly, writing a report thoughtfully and diligently will contribute to our skill improvement.
+As mentioned above, a good report contains author's well-developed comprehension of knowledge, and however, writing itself usually servers as a catalyst for elevating your grasp.
+When you put your thinking down to the \("\)paper\("\), you must consider it more comprehensively and carefully.
+Apart from the parts related to the experiment itself, writing skills will also be improved when you're preparing a good lab report.
+This is a wide concept that consists of various aspects of writing skills, including the use of academic language and structure, and also the application of technical tools, such as \LaTeX.
+
+% ---Structure and Format---
+\section{Structure and Format}
+
+After building a comprehensive pre-writing consideration, how to design an appropriate article structure and format becomes the next question needs to be addressed.
+
+Firstly, traditional logical flow structure is necessary, but it needs to be refined and modified.
+The traditional structure likes an official journal paper, following the sections: abstract, introduction, methodology, results, and discussion.
+Although it seems that directly show your answers and experimental results is the most efficient way to prove your workload to the teacher, this pattern will deprive the chance of improving writing skills.
+However, the detailed information can be found in guide manuals, so the \("\)introduction\("\) should serve as an excerpt of the key content in guidance, and \("\)methodology\("\) can be simplified unless it involves your personal designs rather than a repetition of guidelines.
+In summary, the template structure finally is proposed: abstract, introduction, experiment process, results and discussion, appendix and references.
+
+
+The structure of the provided template document is as follows:
+
+\begin{enumerate}
+    \item Abstract: \\A brief overview of the experiment report, summarizing its objectives and findings.
+    \item Introduction: \\Provides background and details on the purpose of the experiment.
+    \item Experiment Process: \\Describes the specific steps and procedures carried out during the experiment.
+    \item Results and Discussion: \\Presents the results obtained from the experiment and discusses their significance.
+    \item Appendix: Challenges and Solutions: \\An appendix that details any challenges faced during the experiment and the solutions implemented.
+\end{enumerate}
+
+
+% ---Specific Implementation---
+\section{Implementation Details}
+
+Moreover, there are also some formatted display approaches to increase the efficiency of reviewing for professors and teaching assistants.
+Specifically, in the section of results and discussion, we can put the question into the below block.
+
+\begin{questionbox}
+This is an example of question in lab assignment.
+\end{questionbox}
+
+
+
+\begin{lstlisting}[caption={Example QuestaSim .do File}, label={lst:questasim_example}, language=questasim]
+// This is an example code block.
+vlog my_module.v
+vsim my_module
+add wave -position end sim:/my_module/*
+run -all
+quit
+\end{lstlisting}
+
+\section*{Appendix}
+
+\section*{Example using listings}
+
+Here is some LaTeX code:
+
+\begin{lstlisting}[language=LaTeX,label={lst:LaTeX_block}]
+\documentclass{article}
+\usepackage{graphicx}
+\begin{document}
+\includegraphics[width=0.5\textwidth]{example-image.png}
+\end{document}
+\end{lstlisting}
+
+Comment: The template is a little complex in some situations, I do not think it is suit for every student.
+I also do not think a compulsory template is a good choice in a course.
+However, a series of well-designed templates, designed for different students respectively, could save everyone's time and energy.
+
+The  \LaTeX  template file can be found here: \\
+\url{https://cn.overleaf.com/read/tknbnrtfyvvd#b4da39}
+
+Here is an example PDF file generated by such a template file:
+
+\includepdf[pages=-]{template_cutted.pdf} % 将example.pdf替换为你的PDF文件名
+
+\noindent\textbf{End of an inserted document.} % 插入的文件已经完结
+
+\printbibliography
+
+\end{document}

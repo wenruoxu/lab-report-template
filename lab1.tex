@@ -1,0 +1,87 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr} % for custom headers and footers
+\usepackage[utf8]{inputenc} % support for UTF-8 encoding
+\usepackage{geometry} % for page layout
+\geometry{a4paper, margin=1in} % set A4 paper and margin
+\usepackage{lipsum}  % For generating dummy text
+
+\usepackage[T1]{fontenc}
+\usepackage{newpxtext,newpxmath}  % 使用Palatino字体
+
+
+\setcounter{secnumdepth}{2}
+
+% 设置文献样式为 IEEE
+\usepackage[style=ieee]{biblatex}
+
+\addbibresource{references/reference.bib}  % 指定文献数据库
+
+
+% 定义课程名称宏
+\newcommand{\coursename}{DAT094}
+\newcommand{\labname}{Lab1: Combinational and sequential logic}
+
+\input{format/code_block}
+\input{format/question_box}
+\input{format/title}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+\fancyfoot[C]{\thepage} % center page number in the footer
+
+
+\fancyhead[L]{\labname} % "Experiment Report" on the left header
+\fancyhead[R]{\coursename} % course name on the right header
+
+\section*{Abstract}
+
+\textbf{This is the abstract content... \cite{BaiduWeb}}
+
+\lipsum[1] % Dummy text to show the effect
+
+\section{Introduction}
+\textbf{Here describe in detail the purpose of the experiment...}
+
+\lipsum[1] % Dummy text to show the effect
+
+
+\section{Experiment Process}
+\textbf{Here describe the specific steps of the experiment...}
+
+\lipsum[1] % Dummy text to show the effect
+
+\section{Results and Discussion}
+\textbf{Here describe the experimental results and necessary discussions...}
+
+\lipsum[1] % Dummy text to show the effect
+
+\begin{questionbox}
+What is the purpose of the entity and the architecture sections, respectively?
+\end{questionbox}
+
+
+\lipsum[1] % Dummy text to show the effect
+
+\begin{lstlisting}[caption={Example QuestaSim .do File}, label={lst:questasim_example}]
+
+// This is a comment
+vlog my_module.v
+vsim my_module
+add wave -position end sim:/my_module/*
+run -all
+quit
+\end{lstlisting}
+
+\lipsum[1] % Dummy text to show the effect
+
+
+\section*{Appendix: Challenges and Solutions}
+\textbf{The difficulties I encountered and the solution I given...}
+
+\lipsum[1] % Dummy text to show the effect
+
+\printbibliography
+
+\end{document}
