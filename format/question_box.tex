@@ -11,3 +11,13 @@
     title=Question \thetcbcounter,
     #1
 }
+
+
+% 定义一个定制的 tcolorbox 环境
+\newtcolorbox[auto counter]{notebox}[1][]{%
+    colback=green!10!white,
+    colframe=green!55!black,
+    title=Note \thetcbcounter,
+    #1
+}
+

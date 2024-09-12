@@ -4,6 +4,7 @@
 \usepackage{geometry} % for page layout
 \geometry{a4paper, margin=1in} % set A4 paper and margin
 \usepackage{lipsum}  % For generating dummy text
+\usepackage{array}
 
 \usepackage[T1]{fontenc}
 \usepackage{newpxtext,newpxmath}  % 使用Palatino字体
@@ -25,6 +26,9 @@
 \input{format/question_box}
 \input{format/title}
 
+\input{format/insert_img}
+
+
 \begin{document}
 
 \maketitle
@@ -35,52 +39,351 @@
 \fancyhead[L]{\labname} % "Experiment Report" on the left header
 \fancyhead[R]{\coursename} % course name on the right header
 
+% ---Abstract---
 \section*{Abstract}
 
-\textbf{This is the abstract content... \cite{BaiduWeb}}
-
-\lipsum[1] % Dummy text to show the effect
-
+% ---Introduction---
 \section{Introduction}
-\textbf{Here describe in detail the purpose of the experiment...}
 
-\lipsum[1] % Dummy text to show the effect
-
-
+% ---Experment Process---
 \section{Experiment Process}
-\textbf{Here describe the specific steps of the experiment...}
 
-\lipsum[1] % Dummy text to show the effect
-
+% ---Results and Discussion---
 \section{Results and Discussion}
-\textbf{Here describe the experimental results and necessary discussions...}
-
-\lipsum[1] % Dummy text to show the effect
 
 \begin{questionbox}
 What is the purpose of the entity and the architecture sections, respectively?
 \end{questionbox}
 
+The concepts of entity and architecture contribute to managing hardware structure designs for engineers.
+As their name suggests, the \("Entity"\) can be seen as a unit from outside perspective, and the \("Architecture"\) sections indicate specific realization methods of such an entity unit.
 
-\lipsum[1] % Dummy text to show the effect
+In a declaration of entity, uses must confirm the external properties, ranging from entity and port names, their input and output setting, and data types.
+Thus, the purpose of setting entities is to allow this unit to be used as a part of the overall design, and user can also personalize its parameter when instantiate an entity.
 
-\begin{lstlisting}[caption={Example QuestaSim .do File}, label={lst:questasim_example}]
+Architectures contain the details to realization of an entity.
+It also gives users a more clear display and design way of an entity design, where designers can divide an entity into different parts.
+In a complex module, the standard of segmentation is generally by their function.
+Generally, an architecture section only implements one function, so that this is a more efficient method to design function block and debug.
+Besides, these two definitions provide more convenient solutions for design's reusability.
 
-// This is a comment
-vlog my_module.v
-vsim my_module
-add wave -position end sim:/my_module/*
-run -all
-quit
+\begin{questionbox}
+Describe the std\_logic type.
+What are the possible values that a signal of this type can take?
+Can you motivate this set of values from a simulation perspective?
+\end{questionbox}
+
+According to IEEE1164, std\_logic supports a lot of different types of signal.
+There is a table to illustrate them respectively:
+
+\newpage
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{7cm}|}
+\hline
+\textbf{Value} & \textbf{Description} & \textbf{Motivation from Simulation Perspective} \\
+\hline
+'U' & Uninitialized & Indicates that the signal has not been initialized, helping detect uninitialized signals during simulation. \\
+\hline
+'X' & Forcing Unknown & Represents an unknown state due to signal conflicts or undefined values, useful for detecting driver conflicts. \\
+\hline
+'0' & Logic 0 & Represents logical low (false), typically used for normal binary operation. \\
+\hline
+'1' & Logic 1 & Represents logical high (true), typically used for normal binary operation. \\
+\hline
+'Z' & High Impedance & Represents a tri-state condition, useful for modeling buses and tri-state buffers where signals are not driven. \\
+\hline
+'W' & Weak Unknown & Indicates a weakly driven unknown state, useful for modeling situations where the drive strength is insufficient. \\
+\hline
+'L' & Weak 0 & Represents a weakly driven logic 0, commonly used for weak pull-down configurations. \\
+\hline
+'H' & Weak 1 & Represents a weakly driven logic 1, commonly used for weak pull-up configurations. \\
+\hline
+'-' & Don't Care & Represents a "don't care" condition, useful for synthesis optimization where the exact value is irrelevant. \\
+\hline
+\end{tabular}
+\caption{Possible Values of the \texttt{std\_logic} Type and Their Simulation Motivations}\label{tab:std_type_table}
+\end{table}
+
+However, there are four types we used most frequently: \('1','0','Z','X'\).
+Those values can be set for a signal, and it is also the only four meaningful and potential occurred values in simulation.
+So we can, to some extent, simplify above types into the four ones.
+
+We have no necessary to discuss the value \('0'\) and \('1'\), which are the basic of any digital system.
+\('X'\) will appear when you forget to initialize (reset) circuit when simulating, especially there exists some registers.
+It means that the signal state can be high or low because, without initialization, register values determined by physical circuit situation randomly when power is on.
+\('Z'\) represents high-impedance mode of a tri-state gate.
+
+\begin{questionbox}
+What is the default length of the input and output vectors in the module convert\_data\_format?
+\end{questionbox}
+
+
+\begin{lstlisting}[caption={Entity declaration in "convert\_data\_format.vhdl"}, label={lst:VHDL_default_length}, language=VHDL]
+entity convert_data_format is
+  generic(SIGNAL_WIDTH : integer := 4);
+  port(input  : in  std_logic_vector(SIGNAL_WIDTH-1 downto 0);
+       convert: in  std_logic;
+       output : out std_logic_vector(SIGNAL_WIDTH-1 downto 0));
+end entity convert_data_format;
 \end{lstlisting}
 
-\lipsum[1] % Dummy text to show the effect
+According to the second line in Listing \ref{lst:VHDL_default_length}, we can easily find the default bit width input and output vectors is 4.
+
+\begin{questionbox}
+What is the meaning of the symbol <= as used in the file?
+\end{questionbox}
+
+In VHDL, \("<="\) is an operator to realize the assignment of a signal.
+The effect has a little difference with the assignment behaviors in software development.
+As in verilog, the value would not be directly conveyed to the signal, but developers can consider this assignment will happen when the architecture's function has been done.
+
+\begin{notebox}
+    Noticeably, in VHDL, there is no a conception of blocking assignment rather than in Verilog.
+    The non-blocking assignment (\("<="\)) that all assignments happen in parallel, which is so important in sequential logic designs.
+    The singularity of assignment operator helps us reduce the mistakes caused by misunderstandings on blocking and non-blocking assignment in Verilog.
+\end{notebox}
+
+\begin{questionbox}
+What is the meaning of the symbol \& as used in the file?
+\end{questionbox}
+
+\begin{lstlisting}[caption={ "\&" symbol in "convert\_data\_format.vhdl"}, label={lst:concatenation_operator_module}, language=VHDL]
+-- In .vhdl file
+output <= not(input(SIGNAL_WIDTH-1)) & input(SIGNAL_WIDTH-2 downto 0) when (convert = '1');
+\end{lstlisting}
+
+\begin{lstlisting}[caption={ "\&" symbol in "convert\_data\_format\_tb.vhdl"}, label={lst:concatenation_operator_tb}, language=VHDL]
+-- In testbench file:
+assert (output = "0110")
+  report "Error for input " & to_string(input) &
+  ": The output value is " & to_string(output) &
+  ", but it should be " & "0110"
+  severity warning;
+wait for 100 ns;                    -- 150 ns 1110
+
+assert (output = "1110")
+  report "Error for input " & to_string(input) &
+  ": The output value is " & to_string(output) &
+  ", but it should be " & "1110"
+  severity warning;
+wait for 100 ns;                    -- 250 ns 0110
+
+assert (output = "1110")
+  report "Error for input " & to_string(input) &
+  ": The output value is " & to_string(output) &
+  ", but it should be " & "1110"
+  severity warning;
+wait for 100 ns;                    -- 350 ns 1110
+
+assert (output = "0110")
+  report "Error for input " & to_string(input) &
+  ": The output value is " & to_string(output) &
+  ", but it should be " & "0110"
+  severity warning;
+wait for 50 ns;
+
+-- Force testbench to stop after 400 ns
+report "Testbench finished!" severity failure;
+\end{lstlisting}
+
+In Listing \ref{lst:concatenation_operator_module}, the symbol of \("\&"\) is a concatenation operator in VHDL which can gather different signals into a new port or an internal sigal.
+In testbench file like Listing \ref{lst:concatenation_operator_tb}, this notation has more useful and flexible usage.
+When setting assertion part in a testbench, users can use this to concatenate strings similar to the \("+"\) operator in high-level program languages.
+
+\begin{questionbox}
+Describe in your own words how this module computes output values from the input values.
+\end{questionbox}
+
+\begin{lstlisting}[caption={Entity declaration in "convert\_data\_format.vhdl"}, label={lst:converter_description}, language=VHDL]
+entity convert_data_format is
+  generic(SIGNAL_WIDTH : integer := 4);
+  port(input  : in  std_logic_vector(SIGNAL_WIDTH-1 downto 0);
+       convert: in  std_logic;
+       output : out std_logic_vector(SIGNAL_WIDTH-1 downto 0));
+end entity convert_data_format;
+
+architecture convert_data_format_arch of convert_data_format is
+begin
+  output <= not(input(SIGNAL_WIDTH-1)) & input(SIGNAL_WIDTH-2 downto 0) when (convert = '1')
+            else input;
+end architecture convert_data_format_arch;
+\end{lstlisting}
+
+Listing \ref{lst:converter_description} is the specific architecture in a converter entity.
+This entity design has two input ports and an output port.
+
+The single bit input port \("\text{convert}"\) takes the responsibility of controlling converting function part work or not.
+When input port \("\text{convert}"\) is enabled (high), the \("\text{output}"\) port is assigned the inverted value of the \((\text{SIGNAL\_WIDTH}-1)^{\text{th}}\) bit of the input, followed by the remaining bits.
+It will directly output the input value.
+
+\begin{questionbox}
+Using the QuestaSim Help system, briefly describe in your own words what each command in the do file does.
+\end{questionbox}
+
+\begin{lstlisting}[caption={convert\_data\_format\_tb.do File}, label={lst:do_file_lab1a}, language=questasim]
+restart -f -nowave
+config wave -signalnamewidth 1
+
+add wave convert
+add wave -divider "Binary Representation"
+add wave -radix binary input output
+add wave -divider "Signed Representation"
+add wave -radix decimal input output
+add wave -divider "Unsigned Representation"
+add wave -radix unsigned input output
+
+run 400ns
+
+view signals wave
+\end{lstlisting}
+
+With the help of official guide files \cite{Questasim_help_system}, we can get the meaning of each line in the do file (Listing \ref{lst:do_file_lab1a}).
+A table summarized keywords meaning in a do file is following:
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|p{10cm}|}
+%\begin{tabular}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{7cm}|}
+\hline
+\textbf{Keyword}           & \textbf{Meaning}                                                                                          \\ \hline
+\texttt{restart}           & Restarts the simulation environment and clears any previous waveforms.                                      \\ \hline
+\texttt{config wave}       & Configures waveform display parameters, such as the signal name width.                                     \\ \hline
+\texttt{add wave}          & Adds a signal to the waveform window for observation during the simulation.                                \\ \hline
+\texttt{add wave -divider} & Adds a divider in the waveform window to organize and distinguish between different sections of signals.   \\ \hline
+\texttt{add wave -radix}   & Sets the radix (number format) for signal display, such as binary, decimal, or unsigned.                   \\ \hline
+\texttt{run}               & Runs the simulation for a specified amount of time (e.g., 400 ns).                                         \\ \hline
+\texttt{view signals}      & Opens the waveform window to display signals and their waveforms.                                          \\ \hline
+\end{tabular}
+\caption{Summary of do file keywords}\label{tab:table_do_keywords}
+\end{table}
+
+Based on the Table \ref{tab:table_do_keywords}, the Listing \ref{lst:do_file_lab1a} can be interpreted into those steps:
+
+\begin{enumerate}
+    \item Restart Simulation:
+    \begin{itemize}
+        \item \texttt{restart -f -nowave} – Reset the simulation without previous waveforms.
+    \end{itemize}
+
+    \item Configure Waveform:
+    \begin{itemize}
+        \item \texttt{config wave -signalnamewidth 1} – Set signal name width in the waveform display.
+    \end{itemize}
+
+    \item Add Signals:
+    \begin{itemize}
+        \item \texttt{add wave convert} – Add signal \texttt{convert} to the waveform.
+    \end{itemize}
+
+    \item Set Up Dividers and Radix:
+    \begin{itemize}
+        \item Binary Representation:
+        \begin{itemize}
+            \item Add a “Binary Representation” divider and display input and output in binary.
+        \end{itemize}
+        \item Signed Representation:
+        \begin{itemize}
+            \item Add a “Signed Representation” divider and display input and output in signed decimal.
+        \end{itemize}
+        \item Unsigned Representation:
+        \begin{itemize}
+            \item Add an “Unsigned Representation” divider and display input and output in unsigned decimal.
+        \end{itemize}
+    \end{itemize}
+
+    \item Run Simulation:
+    \begin{itemize}
+        \item \texttt{run 400ns} – Run the simulation for 400 nanoseconds.
+    \end{itemize}
+
+    \item View Waveforms:
+    \begin{itemize}
+        \item \texttt{view signals wave} – Open the waveform viewer to observe signals.
+    \end{itemize}
+\end{enumerate}
+
+\begin{notebox}
+    Compare my previous experience of using Modelsim, just clicking the right button to add all ports into a waveform window, wrting and executing a \.do file is so convenient and has a better portability.
+
+    Of which, adding some dividers and changing different signals into appropriate data formats are the most impressive on me.
+\end{notebox}
+
+\begin{questionbox}
+Describe in your report the malfunction caused by the change in signal range in convert data format.vhdl, and how the test bench indicated that something was wrong.
+\end{questionbox}
 
 
+\begin{lstlisting}[caption={Errors and warnings show in terminal}, label={lst:info-error-lab1a}, language=info_terminal]
+
+** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+           File in use by: root  Hostname: knuffodrag.ita.chalmers.se  ProcessID: 217792
+           Attempting to use alternate WLF file "./wlftEs6x53".
+** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+           Using alternate file: ./wlftEs6x53
+** Warning: Error for input 0110: The output value is 1011, but it should be 1110
+    Time: 250 ns  Iteration: 0  Instance: /convert_data_format_tb
+** Warning: Error for input 1110: The output value is 0111, but it should be 0110
+    Time: 350 ns  Iteration: 0  Instance: /convert_data_format_tb
+** Failure: Testbech finished!
+
+\end{lstlisting}
+
+Benefiting from those assertion commands set in testbench file, we can quickly locate the unexpected value.
+Besides, observing and comparing waveform (Figure \ref{fig:waveform_before_lab1a} and Figure \ref{fig:waveform_after_lab1a}) before and after changing is another method to detect, but non-intuitively.
+
+\insertimage{img/waveform_before_lab1a.png}{0.9}{Before}{fig:waveform_before_lab1a}
+\insertimage{img/waveform_after_lab1a.png}{0.9}{After}{fig:waveform_after_lab1a}
+
+
+\begin{questionbox}
+Make a few other small changes, one by one; for each one, study the pronouncements of the test bench.
+Did the bench catch all errors?
+If not, why not?
+\end{questionbox}
+
+\begin{questionbox}
+Describe in your own words what the new elements in the sequential logic section represent and accomplish.
+\end{questionbox}
+
+\begin{questionbox}
+What is the significance of the list of signal names following the keyword process?
+\end{questionbox}
+
+\begin{questionbox}
+Briefly describe, in your own words, the idea behind a finite state machine (FSM).
+\end{questionbox}
+
+\begin{questionbox}
+Each of the process clauses in the example file implements one aspect of the FSM behavior.
+What are these?
+\end{questionbox}
+
+\begin{questionbox}
+The clk and rst signals do not occur in all the process clauses.
+Why is this?
+\end{questionbox}
+
+\begin{questionbox}
+Compare the port lists of the component with that of the entity in dac controller.vhdl.
+Are there any significant differences?
+\end{questionbox}
+
+\begin{questionbox}
+Describe in your report the malfunction caused by the change in state transition in dac controller.vhdl, and how the test bench indicated that something was wrong.
+\end{questionbox}
+
+\begin{questionbox}
+Make a few other small changes; for each one, study the pronouncements of the test bench.
+Did the bench catch all errors?
+If not, why not?
+\end{questionbox}
+
+
+% ---Challenges and Solutions---
 \section*{Appendix: Challenges and Solutions}
-\textbf{The difficulties I encountered and the solution I given...}
 
-\lipsum[1] % Dummy text to show the effect
 
 \printbibliography
 

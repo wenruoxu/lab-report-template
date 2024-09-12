@@ -1,17 +1,34 @@
 \documentclass{article}
+\usepackage{array}
 
 \begin{document}
 
-\section*{Summary of the Document Structure}
-
-The structure of the provided template document is as follows:
-
-\begin{enumerate}
-    \item Abstract: A brief overview of the experiment report, summarizing its objectives and findings.
-    \item Introduction: Provides background and details on the purpose of the experiment.
-    \item Experiment Process: Describes the specific steps and procedures carried out during the experiment.
-    \item Results and Discussion: Presents the results obtained from the experiment and discusses their significance.
-    \item Appendix: Challenges and Solutions: An appendix that details any challenges faced during the experiment and the solutions implemented.
-\end{enumerate}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{7cm}|}
+\hline
+\textbf{Value} & \textbf{Description} & \textbf{Motivation from Simulation Perspective} \\
+\hline
+'U' & Uninitialized & Indicates that the signal has not been initialized, helping detect uninitialized signals during simulation. \\
+\hline
+'X' & Forcing Unknown & Represents an unknown state due to signal conflicts or undefined values, useful for detecting driver conflicts. \\
+\hline
+'0' & Logic 0 & Represents logical low (false), typically used for normal binary operation. \\
+\hline
+'1' & Logic 1 & Represents logical high (true), typically used for normal binary operation. \\
+\hline
+'Z' & High Impedance & Represents a tri-state condition, useful for modeling buses and tri-state buffers where signals are not driven. \\
+\hline
+'W' & Weak Unknown & Indicates a weakly driven unknown state, useful for modeling situations where the drive strength is insufficient. \\
+\hline
+'L' & Weak 0 & Represents a weakly driven logic 0, commonly used for weak pull-down configurations. \\
+\hline
+'H' & Weak 1 & Represents a weakly driven logic 1, commonly used for weak pull-up configurations. \\
+\hline
+'-' & Don't Care & Represents a "don't care" condition, useful for synthesis optimization where the exact value is irrelevant. \\
+\hline
+\end{tabular}
+\caption{Possible Values of the \texttt{std\_logic} Type and Their Simulation Motivations}
+\end{table}
 
 \end{document}

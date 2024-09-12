@@ -1,0 +1,15 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'template.blg'
+[50] biber-darwin:340> INFO - === Thu Sep 12, 2024, 10:44:01
+[62] Biber.pm:419> INFO - Reading 'template.bcf'
+[115] Biber.pm:979> INFO - Found 1 citekeys in bib section 0
+[128] Biber.pm:4419> INFO - Processing section 0
+[140] Biber.pm:4610> INFO - Looking for bibtex file 'references/reference.bib' for section 0
+[152] bibtex.pm:1713> INFO - LaTeX decoding ...
+[155] bibtex.pm:1519> INFO - Found BibTeX data source '/Users/zhuanz/Downloads/Chalmers Lab report (DAT094) (1)/references/reference.bib'
+[179] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[179] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[179] Biber.pm:4239> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[179] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[183] bbl.pm:660> INFO - Writing 'template.bbl' with encoding 'UTF-8'
+[184] bbl.pm:763> INFO - Output to template.bbl

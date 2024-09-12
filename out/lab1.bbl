@@ -1,0 +1,42 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{Questasim_help_system}{online}{}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labeltitlesource}{title}
+      \field{title}{Help: Tcl and DO Files}
+      \field{urlday}{9}
+      \field{urlmonth}{9}
+      \field{urlyear}{2024}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb file:///usr/local/cad/questa-2024.1.2/questasim/docs/htmldocs/mgchelp.htm#context=questa_sim_user&id=1357&ihub=questa_sim_ih&Sword=do
+      \endverb
+      \verb{url}
+      \verb file:///usr/local/cad/questa-2024.1.2/questasim/docs/htmldocs/mgchelp.htm#context=questa_sim_user&id=1357&ihub=questa_sim_ih&Sword=do
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

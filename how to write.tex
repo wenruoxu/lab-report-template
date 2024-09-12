@@ -88,10 +88,13 @@ This is a wide concept that consists of various aspects of writing skills, inclu
 \section{Structure and Format}
 
 After building a comprehensive pre-writing consideration, how to design an appropriate article structure and format becomes the next question needs to be addressed.
+In other words, what is the structure and format for a good experiment report?
 
 Firstly, traditional logical flow structure is necessary, but it needs to be refined and modified.
 The traditional structure likes an official journal paper, following the sections: abstract, introduction, methodology, results, and discussion.
-Although it seems that directly show your answers and experimental results is the most efficient way to prove your workload to the teacher, this pattern will deprive the chance of improving writing skills.
+Generally, it appears in any scientific journal because it gives a distinct path for other researchers to explain how they realize it and how others can reproduce it.
+In a lab exercise designed by a professor, actually, the path is relatively fixed, and it is also not the important part compared to your personal suggestion and optimization.
+Although it seems that directly showing your answers and experimental results is the most efficient way to prove your workload to the teacher, this pattern will deprive the chance of improving writing skills and make it a wired article rather than a completed report.
 However, the detailed information can be found in guide manuals, so the \("\)introduction\("\) should serve as an excerpt of the key content in guidance, and \("\)methodology\("\) can be simplified unless it involves your personal designs rather than a repetition of guidelines.
 In summary, the template structure finally is proposed: abstract, introduction, experiment process, results and discussion, appendix and references.
 
@@ -106,18 +109,16 @@ The structure of the provided template document is as follows:
     \item Appendix: Challenges and Solutions: \\An appendix that details any challenges faced during the experiment and the solutions implemented.
 \end{enumerate}
 
+The above structure is designed based on what is a good report in my mind.
+In addition, apart from consider the main structure, maintaining a unified format or visual style is also important because it will enhance the readability of your reports and make it more aesthetic.
+Nowadays, to create a \LaTeX \ template and customize it for every single class and laboratory task on online \LaTeX \ compiling platform overleaf is an advisable workflow.
+I created a template and set some convenient interface for quickly changing the title and course name for improving portability.
+Author can define some specific display approaches in person, such as the following blocks:
 
-% ---Specific Implementation---
-\section{Implementation Details}
-
-Moreover, there are also some formatted display approaches to increase the efficiency of reviewing for professors and teaching assistants.
-Specifically, in the section of results and discussion, we can put the question into the below block.
 
 \begin{questionbox}
 This is an example of question in lab assignment.
 \end{questionbox}
-
-
 
 \begin{lstlisting}[caption={Example QuestaSim .do File}, label={lst:questasim_example}, language=questasim]
 // This is an example code block.
@@ -128,32 +129,71 @@ run -all
 quit
 \end{lstlisting}
 
-\section*{Appendix}
+It is also a noticeable way to emphasize personal answers and designs here.
+Students can use the vivid color to guide reviewers to directly to find the part they should pay attention to.
 
-\section*{Example using listings}
+% ---Specific Implementation---
+\section{Implementation Details}
 
-Here is some LaTeX code:
+For now, we have discussed what a good report looks like, the content and framework of it.
+There is also something behind a smart report which I think it is necessary for writing a report effectively and beneficially for a student.
+Specifically, some effective implementation details are both useful for just writing a lab report and for further personal career.
+
+Then, I will give some simple but meaningful advice just based on my experience.
+Firstly, in \LaTeX , when we try to construct a block I mentioned before is quite wordy, and so, we can new a command (like Macros in programing languages):
 
 \begin{lstlisting}[language=LaTeX,label={lst:LaTeX_block}]
-\documentclass{article}
-\usepackage{graphicx}
-\begin{document}
-\includegraphics[width=0.5\textwidth]{example-image.png}
-\end{document}
+% If we use \newcolorbox to create a category "question_box" rather than copy it every time
+\newtcolorbox[auto counter]{question_box}[1][]{%
+    colback=red!10!white,
+    colframe=red!55!black,
+    title=Question \thetcbcounter,
+    #1
+}
+
+% An example
+\begin{question_box}
+This is an example of question in lab assignment.
+\end{question_box}
+
 \end{lstlisting}
 
-Comment: The template is a little complex in some situations, I do not think it is suit for every student.
+Secondly, users can also use \("\)input\("\) command to simplify the main source file and make writers focus on the main body of an article easily.
+In this template, I set some external files to greatly shorten the line counts of the main file.
+
+\begin{lstlisting}[language=LaTeX]
+\input{format/code_block}
+\input{format/question_box}
+\input{format/title}
+\end{lstlisting}
+
+
+
+\section*{Appendix}
+
+Comment:
+
+For the article:
+although I try to write it more officially and academically, there are so many inappropriate expressions.
+To be honest, I am not an experienced writer in academic writing, so I often struggle with structuring my ideas clearly and using the appropriate language.
+However, I am committed to improving and learning through practice in future lab reports.
+
+For the template:
+it is a little complex in some situations, I do not think it is suited for every student.
 I also do not think a compulsory template is a good choice in a course.
 However, a series of well-designed templates, designed for different students respectively, could save everyone's time and energy.
 
-The  \LaTeX  template file can be found here: \\
+The  \LaTeX  template file can be found here on overleaf website: \\
 \url{https://cn.overleaf.com/read/tknbnrtfyvvd#b4da39}
+
+It can also be found at GitHub:\\
+\url{https://github.com/wenruoxu/lab-report-template}
 
 Here is an example PDF file generated by such a template file:
 
-\includepdf[pages=-]{template_cutted.pdf} % 将example.pdf替换为你的PDF文件名
+%\includepdf[pages=-]{template_cutted.pdf} % 将example.pdf替换为你的PDF文件名
 
-\noindent\textbf{End of an inserted document.} % 插入的文件已经完结
+\newpage
 
 \printbibliography
 
