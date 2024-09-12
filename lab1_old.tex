@@ -333,8 +333,8 @@ Describe in your report the malfunction caused by the change in signal range in 
 Benefiting from those assertion commands set in testbench file, we can quickly locate the unexpected value.
 Besides, observing and comparing waveform (Figure \ref{fig:waveform_before_lab1a} and Figure \ref{fig:waveform_after_lab1a}) before and after changing is another method to detect, but non-intuitively.
 
-\insertimage{img/waveform_before_lab1a.png}{0.5}{Before}{fig:waveform_before_lab1a}
-\insertimage{img/waveform_after_lab1a.png}{0.5}{After}{fig:waveform_after_lab1a}
+\insertimage{img/waveform_before_lab1a.png}{0.9}{Before}{fig:waveform_before_lab1a}
+\insertimage{img/waveform_after_lab1a.png}{0.9}{After}{fig:waveform_after_lab1a}
 
 
 \begin{questionbox}
@@ -343,286 +343,36 @@ Did the bench catch all errors?
 If not, why not?
 \end{questionbox}
 
-\begin{lstlisting}[caption={Change 1}, label={lst:small_change_1}, language=VHDL]
-output <= not(input(SIGNAL_WIDTH-1)) & input(SIGNAL_WIDTH-2 downto 0) when (convert = '0')
-    else input;
-\end{lstlisting}
-
-
-\begin{lstlisting}[caption={Errors and warnings show in terminal with change 1}, label={lst:info-error-change1}, language=info_terminal]
-# Loading work.convert_data_format(convert_data_format_arch)#1
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-8009) Loading existing optimized design _opt
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
-# ** Warning: Error for input 0110: The output value is 1110, but it should be 0110
-#    Time: 50 ns  Iteration: 0  Instance: /convert_data_format_tb
-# ** Warning: Error for input 1110: The output value is 0110, but it should be 1110
-#    Time: 150 ns  Iteration: 0  Instance: /convert_data_format_tb
-# ** Warning: Error for input 0110: The output value is 0110, but it should be 1110
-#    Time: 250 ns  Iteration: 0  Instance: /convert_data_format_tb
-# ** Warning: Error for input 1110: The output value is 1110, but it should be 0110
-#    Time: 350 ns  Iteration: 0  Instance: /convert_data_format_tb
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Change 2}, label={lst:small_change_2}, language=VHDL]
-entity convert_data_format is
-  generic(SIGNAL_WIDTH : integer := 5);
-  port(input   : in  std_logic_vector(SIGNAL_WIDTH-1 downto 0);
-       convert : in  std_logic;
-       output  : out std_logic_vector(SIGNAL_WIDTH-1 downto 0));
-end entity convert_data_format;
-\end{lstlisting}
-
-After simulation of two modified codes (Listing \ref{lst:small_change_1} and Listing \ref{lst:small_change_2}), we found that, in Lising \ref{lst:small_change_1}, the test bench successfully detected there are some errors.
-The specific warning information can be found in Listing \ref{lst:info-error-change1}.
-\("Assert"\) commands are the most important part in a verification testbench file, which you can preset the wanted value of output signals.
-However, when changing the default value of generic parameter (Listing \ref{lst:small_change_2}), the bench did not realize it.
-The reason of such \("malfunction"\) is that testbench file explicitly set the generic value, when initialing an entity of data converter.
-
-
 \begin{questionbox}
 Describe in your own words what the new elements in the sequential logic section represent and accomplish.
 \end{questionbox}
-
-A noticeable difference is there are two new signals involved in circuit, \("clk" \text{and} "rst"\), which is the crucial realization when we talking the \("memory"\) in a digital sequential circuit.
-
-
-\begin{lstlisting}[caption={A generic structure in a sequential logic block}, label={lst:sequential_characture}, language=VHDL]
-begin
-if rising_edge(clk) then
-  if rst = '1' then
-    channel_reg  <= '0';
-    gain_reg     <= '0';
-    shutdown_reg <= '0';
-    data_reg     <= (others => '0');
-  elsif enable = '1' and current_state = idle then
-    channel_reg  <= channel;
-    gain_reg     <= gain;
-    shutdown_reg <= shutdown;
-    data_reg     <= data;
-  end if;
-end if;
-end process input_registers_proc;
-\end{lstlisting}
-
-For example, in Listing \ref{lst:sequential_characture}, there is a generic structure in any sequential logic circuit.
-Using \("if"\) command catch the rising edge of clock signal as a unified timing for a signal conveying for every sequential component.
-However, due to this, designing a state machine is possible, which you can find in the second VHDL file.
-Using \("type"\) to define a series of states in an FSM may be the second noticeable novel point in sequential designs.
-A larger scale of code is also an interesting point.
-Besides, there are also some signals qualified by \("reg"\), which means register.
-Seemly they could not be directly assigned to be a register like in Verilog, but it must be synthesized as one when necessary.
-In a word, sequential concept allows more complex function designs.
 
 \begin{questionbox}
 What is the significance of the list of signal names following the keyword process?
 \end{questionbox}
 
-Those lists be called signal sensitivity list, which means the following process is depended on those signal's changing behaviors.
-
-\begin{lstlisting}[caption={An example of sensitivity list in VHDL}, label={lst:sensitivity_list}, language=VHDL]
-counter_proc : process (clk)
-begin
-if rising_edge(clk) then
-  if rst = '1' then
-    counter <= 0;
-  else
-    case current_state is
-      when idle =>
-        null;
-      when others =>
-        if counter = SCK_PERIOD_DIV-1 then
-          counter <= 0;
-        else
-          counter <= counter + 1;
-        end if;
-    end case;
-  end if;
-end if;
-end process counter_proc;
-\end{lstlisting}
-
-
 \begin{questionbox}
 Briefly describe, in your own words, the idea behind a finite state machine (FSM).
 \end{questionbox}
-
-A finite state machine (FSM) is a digital control system design concept that operates in a fixed number of distinct states and moves from one state to another based on a set of input conditions.
-Generally specking, the state of FSM will follow the pre-designed principles, which is the most prominent character of FSMs, to change and realize some related functions.
-Specifically, in this design, the data transportation process is controlled by an FSM, in which the state changes automatically following the state transfer rules with the clock signal.
-
 
 \begin{questionbox}
 Each of the process clauses in the example file implements one aspect of the FSM behavior.
 What are these?
 \end{questionbox}
 
-Mainly specking, there are two parts of the sequential circuit: first one takes the responsibility to change the state of FSM, another is related to SPI protocol realization.
-We can summarize their function in the Table \ref{tab:table_processes_function}:
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{|c|p{10cm}|}
-\hline
-\textbf{Process Name} & \textbf{Description} \\
-\hline
-input\_registers\_proc & Responsible for protecting the input signals, ensuring that the input values (channel, gain, shutdown, and data) are stored during transmission to prevent changes in the middle of the process. \\
-\hline
-counter\_proc & Generates the SPI clock signal and controls the timing of FSM state transitions using a counter. The counter is active only during transmission to avoid unnecessary switching. \\
-\hline
-spi\_clock\_proc & Controls the generation of the SPI clock signal (dac\_sck). It ensures the SPI clock is active only during transmission, minimizing unnecessary transitions. \\
-\hline
-state\_change\_proc & Controls the FSM state register, updating the current state based on external signals such as reset. \\
-\hline
-next\_state\_proc & Manages the FSM's next state logic, determining the next state based on the current state, counter, and enable signals. This governs the state transitions during the transmission process. \\
-\hline
-outputs\_proc & Controls the output signals (busy, dac\_cs, dac\_sdi) of the DAC controller, setting the appropriate values for each state of the FSM to send data to the DAC. \\
-\hline
-\end{tabular}
-\caption{Processes in the DAC Controller FSM and Their Descriptions}\label{tab:table_processes_function}
-\end{table}
-
 \begin{questionbox}
 The clk and rst signals do not occur in all the process clauses.
 Why is this?
 \end{questionbox}
 
-\begin{lstlisting}[caption={The two process without clock signal}, label={lst:without_clk}, language=VHDL]
--- FSM next state
-next_state_proc : process (current_state, enable, counter)
-begin
-next_state <= current_state;
-case current_state is
-  when idle =>
-    if enable = '1' then
-      next_state <= send_channel;
-    end if;
-  when send_channel =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_dummy;
-    end if;
-  when send_dummy =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_gain;
-    end if;
-  when send_gain =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_data0;
-    end if;
-  when send_shutdown =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_data11;
-    end if;
-
-    ...
-
-    end if;
-  when send_data1 =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_data0;
-    end if;
-  when send_data0 =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= idle;
-    end if;
-end case;
-end process next_state_proc;
-
--- FSM output
-outputs_proc : process (current_state, channel_reg, gain_reg, shutdown_reg, data_reg)
-begin
-case current_state is
-  when idle =>
-    busy    <= '0';
-    dac_cs  <= '1';
-    dac_sdi <= '0';
-  when send_channel =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= channel_reg;
-  when send_dummy =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= '0';
-  when send_gain =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= gain_reg;
-  when send_shutdown =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= shutdown_reg;
-  when send_data11 =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= data_reg(11);
-  when send_data10 =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= data_reg(10);
-
-    ...
-
-  when send_data0 =>
-    busy    <= '1';
-    dac_cs  <= '0';
-    dac_sdi <= data_reg(0);
-end case;
-end process outputs_proc;
-\end{lstlisting}
-
-There are only two processes, FSM states transfer control and output blocks, unrelated to clock and reset signals.
-FSM next state is mainly controlled by current state and counter value.
-Although those signals are affected by clock and reset, logically, the transference of state only determined by those, so that when designing functions, we just only focus on whether the signal state means we need to change mode rather which clock is an appropriate timing.
-Likewise, the output only relies on current state and other state indicating flags.
-In other words, those are the combinational logic parts in the sequential entity.
-
 \begin{questionbox}
-Open dac controller tb.vhdl and inspect its contents.
-As in the combinational example, there is a component declaration at the beginning of the architecture section.
 Compare the port lists of the component with that of the entity in dac controller.vhdl.
 Are there any significant differences?
 \end{questionbox}
 
-\begin{lstlisting}[caption={DAC controller ports}, label={lst:ports_dac}, language=VHDL]
-  port (clk      : in  std_logic;
-        rst      : in  std_logic;
-        enable   : in  std_logic;
-        channel  : in  std_logic;
-        gain     : in  std_logic;
-        shutdown : in  std_logic;
-        data     : in  std_logic_vector(11 downto 0);
-        busy     : out std_logic;
-        dac_cs   : out std_logic;
-        dac_sck  : out std_logic;
-        dac_sdi  : out std_logic);
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Converter ports}, label={lst:ports_converter}, language=VHDL]
-  port(input   : in  std_logic_vector(SIGNAL_WIDTH-1 downto 0);
-       convert : in  std_logic;
-       output  : out std_logic_vector(SIGNAL_WIDTH-1 downto 0));
-\end{lstlisting}
-
-In DAC controller entity ports declaration, we can see that there is a bigger port number, and clock and reset signal input ports are clarified.
-In converter entity ports declaration, it use a generic parameter to quantify the bit width of the input and output ports.
-
 \begin{questionbox}
 Describe in your report the malfunction caused by the change in state transition in dac controller.vhdl, and how the test bench indicated that something was wrong.
 \end{questionbox}
-
-
-\begin{lstlisting}[caption={Errors infos provided}, label={lst:error_info_lab1borigianl}, language=info_terminal]
-# Loading work.dac_controller(dac_controller_arch)#1
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-8009) Loading existing optimized design _opt1
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
-# ** Warning: Number of SCK edges during one CS write command != 16
-\end{lstlisting}
-
-\insertimage{img/lab1b_changed1}{0.5}{Title}{fig:Changed_1}
-In Listing \ref{lst:error_info_lab1borigianl}, we can see the test bench notice us there are some functions that have not been realized correctly.
-
 
 \begin{questionbox}
 Make a few other small changes; for each one, study the pronouncements of the test bench.
@@ -630,68 +380,9 @@ Did the bench catch all errors?
 If not, why not?
 \end{questionbox}
 
-% ToDo
-
-\begin{lstlisting}[caption={Changed Code}, label={lst:changed_lab1b}, language=VHDL]
-when send_data6 =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_data5;
-    end if;
--- Modify above into below one:
-when send_data6 =>
-    if counter = SCK_PERIOD_DIV-1 then
-      next_state <= send_data5;
-    end if;
-\end{lstlisting}
-
-\begin{lstlisting}[caption={Errors infos provided}, label={lst:error_info_lab1b}, language=info_terminal]
-# Loading work.dac_controller(dac_controller_arch)#1
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-# ** Note: (vsim-8009) Loading existing optimized design _opt1
-# ** Note: (vsim-12126) Error and warning message counts have been restored: Errors=0, Warnings=1.
-# ** Warning: Number of SCK edges during one CS write command != 16
-\end{lstlisting}
-
-\begin{lstlisting}[caption={assertions in test bench file}, label={lst:dac_assertions}, language=VHDL]
-  -- Receive data and compare to transmitted data
-  data_verification_proc : process
-  begin
-    wait until falling_edge(dac_cs);
-    wait for PERIOD/2.0;
-    assert busy = '1' report "Busy flag not set" severity warning;
-    wait until rising_edge(dac_sck);
-    assert dac_sdi = TEST_CHANNEL report "Error in Channel bit" severity warning;
-    wait until rising_edge(dac_sck);
-    -- Don't care bit, no need to check.
-    wait until rising_edge(dac_sck);
-    assert dac_sdi = TEST_GAIN report "Error in Gain bit" severity warning;
-    wait until rising_edge(dac_sck);
-    assert dac_sdi = TEST_SHUTDOWN report "Error in Shutdown bit" severity warning;
-    for idx in 11 downto 0 loop
-      wait until rising_edge(dac_sck);
-      assert dac_sdi = TEST_DATA(idx) report "Error in Data bit " & integer'image(idx) severity warning;
-    end loop;
-    wait until rising_edge(dac_cs);
-    wait for PERIOD;
-    assert busy = '0' report "Busy flag not reset" severity warning;
-    wait for PERIOD;
-    -- Force testbench to stop when the transmission is finished.
-    report "Testbench finished!" severity failure;
-  end process data_verification_proc;
-\end{lstlisting}
-
-% ToDo
-
-This code, Listing \ref{lst:error_info_lab1b}, is the simulation terminal info generated by test bench.
-In some terms, the test bench indeed detected there are some errors, but we cannot directly locate where is modified or what is the bug specifically.
-Reason can be found in the test bench file Listing \ref{lst:dac_assertions}.
-
-
 
 % ---Challenges and Solutions---
 \section*{Appendix: Challenges and Solutions}
-
-\subsection{Personalize and locate Source File}\label{subsec:personalize-and-locate-source-file}
 
 
 \printbibliography
